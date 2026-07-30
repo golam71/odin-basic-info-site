@@ -1,33 +1,24 @@
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 
-async function readAndSendPage(filepath) {
+const routes = {
+  "/": "index.html",
+  "/about": "about.html",
+  "/contact-me": "contact-me.html",
+  "/style.css": "style.css",
+};
+
+async function sendFile(response, fileName) {
   try {
-    let file = await readFile(filepath);
-    return file;
-  } catch (error) {
-    console.log(error);
+    response.end(await readFile(fileName));
+  } catch (err) {
+    console.log(err);
+    response.end("Internal server error");
   }
 }
 
-const server = createServer(async (req, res) => {
-  switch (req.url) {
-    case "/":
-      res.end(await readAndSendPage("./index.html"));
-      break;
-    case "/about":
-      res.end(await readAndSendPage("./about.html"));
-      break;
-    case "/contact-me":
-      res.end(await readAndSendPage("./contact-me.html"));
-      break;
-    case "/style.css":
-      res.end(await readAndSendPage("./style.css"));
-      break;
-    default:
-      res.end(await readAndSendPage("./404.html"));
-      break;
-  }
+const server = createServer((req, res) => {
+  sendFile(res, routes[req.url] ?? "404.html");
 });
 
 server.listen(8080, () => {
