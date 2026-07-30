@@ -6,5 +6,15 @@ body {
 }
 
 h1 {
-  font-family: "Noto Serif",'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Noto Serif", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+a {
+  text-decoration: underline;
+  text-decoration-color: #b7b7b7;
+  color: black;
+}
+
+a:hover {
+  text-decoration-color: black;
 }

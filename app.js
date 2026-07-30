@@ -52,6 +52,6 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(3000, () => {
-  console.log("Serving HTTP on 0.0.0.0 port 3000 (http://0.0.0.0:3000/)");
+server.listen(8080, () => {
+  console.log("Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/)");
 });
