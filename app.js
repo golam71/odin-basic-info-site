@@ -1,54 +1,32 @@
-const http = require("node:http");
-const fs = require("node:fs");
+import { createServer } from "node:http";
+import { readFile } from "node:fs/promises";
 
-let file;
+async function readAndSendPage(filepath) {
+  try {
+    let file = await readFile(filepath);
+    return file;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-const server = http.createServer((req, res) => {
+const server = createServer(async (req, res) => {
   switch (req.url) {
     case "/":
-      fs.readFile("./index.html", (err, data) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.end(data);
-        }
-      });
+      res.end(await readAndSendPage("./index.html"));
       break;
     case "/about":
-      fs.readFile("./about.html", (err, data) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.end(data);
-        }
-      });
+      res.end(await readAndSendPage("./about.html"));
       break;
     case "/contact-me":
-      fs.readFile("./contact-me.html", (err, data) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.end(data);
-        }
-      });
+      res.end(await readAndSendPage("./contact-me.html"));
       break;
     case "/style.css":
-      fs.readFile("./style.css", (err, data) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.end(data);
-        }
-      });
+      res.end(await readAndSendPage("./style.css"));
       break;
     default:
-      fs.readFile("./404.html", (err, data) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.end(data);
-        }
-      });
+      res.end(await readAndSendPage("./404.html"));
+      break;
   }
 });
 
