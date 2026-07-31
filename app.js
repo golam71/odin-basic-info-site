@@ -1,26 +1,22 @@
-import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
+import express from "express";
 
-const routes = {
-  "/": "index.html",
-  "/about": "about.html",
-  "/contact-me": "contact-me.html",
-  "/style.css": "style.css",
+const app = new express();
+
+const send = (filename) => {
+  return (req, res) => {
+    res.sendFile(import.meta.dirname + "/" + filename);
+  };
 };
 
-async function sendFile(response, fileName) {
-  try {
-    response.end(await readFile(fileName));
-  } catch (err) {
-    console.log(err);
-    response.end("Internal server error");
-  }
-}
+app.get("/", send("./index.html"));
+app.get("/about", send("./about.html"));
+app.get("/contact-me", send("./contact-me.html"));
 
-const server = createServer((req, res) => {
-  sendFile(res, routes[req.url] ?? "404.html");
-});
+app.use(express.static(import.meta.dirname + "/public/"));
 
-server.listen(8080, () => {
-  console.log("Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/)");
+app.use(send("./404.html"));
+
+app.listen(8080, (err) => {
+  if (err) console.log(err);
+  else console.log("Serving HTTP on 0.0.0.0 port 8080 (http://0.0.0.0:8080/)");
 });
